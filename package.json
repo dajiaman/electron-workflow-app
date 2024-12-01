@@ -14,6 +14,7 @@
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
+    "dist": "npm run build && electron-builder",
     "postinstall": "electron-builder install-app-deps",
     "package": "npm run build && electron-builder",
     "build:unpack": "npm run build && electron-builder --dir",
