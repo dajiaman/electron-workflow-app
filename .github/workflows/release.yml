@@ -39,9 +39,7 @@ jobs:
           files: |
             dist/*.exe
             dist/*.dmg
-            dist/*.zip
             dist/*.AppImage
-            dist/*.snap
             dist/*.deb
             dist/*.yml
             dist/*.blockmap
