@@ -35,6 +35,9 @@
       }
     ]
   },
+  portable: {
+    artifactName: '${productName}-${version}-${arch}.${ext}'
+  },
   mac: {
     target: [
       {
@@ -56,7 +59,24 @@
     notarize: false
   },
   dmg: {
-    artifactName: '${name}-${version}.${ext}'
+    artifactName: '${name}-${version}-${arch}.${ext}',
+    window: {
+      width: 540,
+      height: 380
+    },
+    contents: [
+      {
+        x: 410,
+        y: 230,
+        type: 'link',
+        path: '/Applications'
+      },
+      {
+        x: 130,
+        y: 230,
+        type: 'file'
+      }
+    ]
   },
   linux: {
     target: [
@@ -76,14 +96,16 @@
     maintainer: 'electronjs.org',
     category: 'Utility'
   },
-  appImage: {
-    artifactName: '${name}-${version}.${ext}'
-  },
   npmRebuild: false,
-  publish: {
-    provider: 'generic',
-    url: 'https://example.com/auto-updates'
-  },
+  publish: [
+    {
+      provider: 'generic',
+      url: 'https://example.com/auto-updates'
+    },
+    {
+      provider: 'github'
+    }
+  ],
   electronDownload: {
     mirror: 'https://npmmirror.com/mirrors/electron/'
   }
