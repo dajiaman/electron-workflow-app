@@ -29,8 +29,9 @@ jobs:
         run: npm run dist
 
       # list
-      - name: list dist directory
-        run: ls -al dist/
+      - name: list
+        if: runner.os == 'Linux'
+        run: ls -a dist/
 
       - name: release
         uses: softprops/action-gh-release@v1
