@@ -1,0 +1,60 @@
+name: Build and Package Electron App
+
+on:
+  push:
+    branches:
+      - master  # 触发条件：当推送到 main 分支时
+  pull_request:
+    branches:
+      - master  # 触发条件：当创建拉取请求到 main 分支时
+  release:
+    types: [created]  # 触发条件：当创建新发布时
+
+jobs:
+  build:
+    runs-on: windows-latest  # 使用 Windows 环境（也可以选择 ubuntu 或 macos）
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # 设置 Node.js 版本
+          cache: 'npm'  # 启用 npm 缓存
+
+      - name: Install dependencies
+        run: npm install  # 安装依赖
+
+      - name: Build Electron app
+        run: npm run dist  # 执行打包命令
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: electron-workflow-app  # 艺术品名称
+          path: electron-dist  # 打包输出目录
+
+  release:
+    needs: build  # 依赖于 build 任务
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: EquipmentApp  # 下载打包后的艺术品
+
+      - name: Create release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}  # 使用发布的标签名
+          body: "Release of version ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+          files: |
+            electron-dist/*.exe  # 上传 Windows 可执行文件
+            electron-dist/*.dmg  # 上传 macOS 安装包
+            electron-dist/*.deb  # 上传 Linux DEB 包
