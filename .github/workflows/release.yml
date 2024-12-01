@@ -44,6 +44,8 @@ jobs:
             dist/*.dmg
             dist/*.AppImage
             dist/*.deb
+            dust/*.zip
+            dist/*.rpm
             dist/*.yml
             dist/*.blockmap
         env:

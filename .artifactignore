@@ -1,5 +1,8 @@
 dist/win-unpacked/
 dist/linux-unpacked/
 dist/mac-unpacked/
+dist/win-ia32-unpacked/
 dist/*.log
 dist/*.tmp
+dist/builder-debug.yml
+dist/builder-effective-config.yaml
