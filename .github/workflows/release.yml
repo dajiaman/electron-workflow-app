@@ -39,7 +39,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: EquipmentApp # 艺术品名称
+          name: electron-build-${{ matrix.os }}
           path: dist # 打包输出目录
         env:
           ACTIONS_STEP_DEBUG: true
@@ -52,9 +52,6 @@ jobs:
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v3
-        with:
-          name: EquipmentApp # 下载打包后的艺术品
-          path: dist
 
       - name: Create release
         id: create_release
