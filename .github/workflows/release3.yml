@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-latest]
 
     steps:
       - name: Checkout code
@@ -25,7 +25,7 @@ jobs:
         run: npm install
 
       - name: Build Electron package
-        run: npm run build
+        run: npm run package
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
