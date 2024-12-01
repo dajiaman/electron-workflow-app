@@ -1,4 +1,4 @@
-name: Build and Upload Electron App
+name: Build and Package Electron App
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }} # 使用矩阵策略来确定操作系统
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Checkout code
@@ -25,46 +25,58 @@ jobs:
           cache: 'npm' # 启用 npm 缓存
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install # 安装依赖
 
-      - name: Build the project
-        run: npm run dist
+      - name: Build Electron app
+        run: npm run dist # 执行打包命令
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          ACTIONS_STEP_DEBUG: true
 
-      - name: Upload build artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v3
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: electron-build
           path: |
+            dist/**/*.deb
+            dist/**/*.rpm
+            dist/**/*.AppImage
             dist/**/*.exe
             dist/**/*.dmg
             dist/**/*.zip
-            dist/**/*.deb
-            dist/**/*.rpm
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          ACTIONS_STEP_DEBUG: true
 
-  publish:
-    needs: build # 确保此作业在 build 作业之后运行
+      - name: List files in dist directory
+        run: ls -R dist/
+
+  release:
+    needs: build # 依赖于 build 任务
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download build artifacts
+      - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           name: electron-build
           path: release/
 
-      - name: Publish to GitHub Releases
+      - name: Create release
+        id: create_release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
+          tag_name: '1.0.0'
+          body: 'Release of version 1.0.0'
+          draft: false
+          prerelease: false
           files: |
+            release/**/*.deb
+            release/**/*.rpm
+            release/**/*.AppImage
             release/**/*.exe
             release/**/*.dmg
             release/**/*.zip
-            release/**/*.deb
-            release/**/*.rpm
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          ACTIONS_STEP_DEBUG: true

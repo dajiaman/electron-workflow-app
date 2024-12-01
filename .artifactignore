@@ -1,0 +1,5 @@
+dist/win-unpacked/
+dist/linux-unpacked/
+dist/mac-unpacked/
+dist/*.log
+dist/*.tmp
