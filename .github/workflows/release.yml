@@ -48,7 +48,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
-          name: EquipmentApp  # 下载打包后的艺术品
+          name: electron-workflow-app  # 下载打包后的艺术品
 
       - name: Create release
         id: create_release
