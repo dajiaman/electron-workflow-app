@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: electron-workflow-app
+productName: EquipmentApp
 directories:
   buildResources: build
 files:
@@ -11,10 +11,8 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 asarUnpack:
   - resources/**
-win:
-  executableName: electron-workflow-app
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: ${name}.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
@@ -27,14 +25,14 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
 dmg:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: ${productName}.${ext}
 linux:
   target:
     - deb
   maintainer: electronjs.org
   category: Utility
 appImage:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: ${productName}.${ext}
 npmRebuild: false
 publish:
   provider: generic

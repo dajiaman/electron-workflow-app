@@ -34,12 +34,16 @@ jobs:
         run: npm run dist # 执行打包命令
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          ACTIONS_STEP_DEBUG: true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: EquipmentApp # 艺术品名称
           path: dist # 打包输出目录
+        env:
+          ACTIONS_STEP_DEBUG: true
+
 
   release:
     needs: build # 依赖于 build 任务
@@ -64,3 +68,4 @@ jobs:
             dist/**/*.deb
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          ACTIONS_STEP_DEBUG: true
