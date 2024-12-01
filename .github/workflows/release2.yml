@@ -32,6 +32,10 @@ jobs:
           # (No need to define this secret in the repo settings)
           github_token: ${{ secrets.RELEASE_TOKEN }}
 
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: true
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           ACTIONS_STEP_DEBUG: true
