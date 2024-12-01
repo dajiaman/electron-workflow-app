@@ -28,6 +28,7 @@ jobs:
         run: npm run package
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          ACTIONS_STEP_DEBUG: true
 
   release:
     needs: build
@@ -41,3 +42,4 @@ jobs:
         run: gh release edit ${{ github.ref_name }} --draft=false
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          ACTIONS_STEP_DEBUG: true

@@ -1,0 +1,70 @@
+name: Build and Upload Electron App
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*' # 仅匹配符合语义化版本控制格式的标签
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }} # 使用矩阵策略来确定操作系统
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # 设置 Node.js 版本
+          cache: 'npm' # 启用 npm 缓存
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the project
+        run: npm run dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: electron-build
+          path: |
+            dist/**/*.exe
+            dist/**/*.dmg
+            dist/**/*.zip
+            dist/**/*.deb
+            dist/**/*.rpm
+
+  publish:
+    needs: build # 确保此作业在 build 作业之后运行
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: electron-build
+          path: release/
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            release/**/*.exe
+            release/**/*.dmg
+            release/**/*.zip
+            release/**/*.deb
+            release/**/*.rpm
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
