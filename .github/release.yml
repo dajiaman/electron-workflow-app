@@ -49,6 +49,8 @@ jobs:
       - name: Create release
         id: create_release
         uses: softprops/action-gh-release@v1
+        env:
+            GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
           tag_name: ${{ github.ref_name }}  # 使用发布的标签名
           body: "Release of version ${{ github.ref_name }}"
@@ -58,3 +60,4 @@ jobs:
             electron-dist/*.exe  # 上传 Windows 可执行文件
             electron-dist/*.dmg  # 上传 macOS 安装包
             electron-dist/*.deb  # 上传 Linux DEB 包
+        
