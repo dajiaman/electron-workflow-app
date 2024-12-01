@@ -12,7 +12,11 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest  # 使用 Windows 环境（也可以选择 ubuntu 或 macos）
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
 
     steps:
       - name: Checkout code
@@ -28,13 +32,13 @@ jobs:
         run: npm install  # 安装依赖
 
       - name: Build Electron app
-        run: npm run dist  # 执行打包命令
+        run: npm run package  # 执行打包命令
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: electron-workflow-app  # 艺术品名称
-          path: electron-dist  # 打包输出目录
+          path: dist  # 打包输出目录
 
   release:
     needs: build  # 依赖于 build 任务
@@ -57,7 +61,6 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            electron-dist/*.exe  # 上传 Windows 可执行文件
-            electron-dist/*.dmg  # 上传 macOS 安装包
-            electron-dist/*.deb  # 上传 Linux DEB 包
-        
+            dist/*.deb
+
+
