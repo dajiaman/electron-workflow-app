@@ -49,4 +49,4 @@ jobs:
             dist/*.yml
             dist/*.blockmap
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
