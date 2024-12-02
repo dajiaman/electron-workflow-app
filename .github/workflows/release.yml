@@ -38,7 +38,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: false
-          prerelease: false
           files: |
             dist/*.exe
             dist/*.dmg
