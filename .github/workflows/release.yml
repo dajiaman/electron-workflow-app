@@ -31,13 +31,19 @@ jobs:
 
       # list
       - name: list
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' || runner.os == 'macOS'
         run: ls -a dist/
+
+      - name: delete noneed file
+        if: runner.os == 'Linux' || runner.os =='macOS'
+        run: |
+          rm -rf dist/builder-debug.yml
 
       - name: release
         uses: softprops/action-gh-release@v1
         with:
           draft: false
+          prerelease: false
           files: |
             dist/*.exe
             dist/*.dmg
@@ -48,5 +54,4 @@ jobs:
             dist/*.yml
             dist/*.blockmap
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
