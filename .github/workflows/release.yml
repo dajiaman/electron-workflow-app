@@ -49,3 +49,4 @@ jobs:
             dist/*.blockmap
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
